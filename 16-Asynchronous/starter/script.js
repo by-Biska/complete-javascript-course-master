@@ -4,28 +4,30 @@ const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 
 const renderError = function (msg) {
-    countriesContainer.insertAdjacentText('beforeend', msg)
-}
+  countriesContainer.insertAdjacentText('beforeend', msg);
+};
 
 const renderCountry = function (data, className = '') {
-    console.log(data);
-    const [language] = Object.values(data.languages)
-    const [currency] = Object.values(data.currencies)
+  console.log(data);
+  const [language] = Object.values(data.languages);
+  const [currency] = Object.values(data.currencies);
 
-    const html = `
+  const html = `
     <article class="country ${className}">
             <img class="country__img" src="${data.flags.svg}" />
             <div class="country__data">
                 <h3 class="country__name">${data.name.common}</h3>
                 <h4 class="country__region">${data.region}</h4>
-                <p class="country__row"><span>👫</span>${(+data.population / 1000000).toFixed(1)}M people</p>
+                <p class="country__row"><span>👫</span>${(
+                  +data.population / 1000000
+                ).toFixed(1)}M people</p>
                 <p class="country__row"><span>🗣️</span>${language}</p>
                 <p class="country__row"><span>💰</span>${currency.name}</p>
                 </div>
                 </article>
-                `
-    countriesContainer.insertAdjacentHTML('beforeend', html)
-}
+                `;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+};
 /*
 const getCountryData = function (country) {
     const request = new XMLHttpRequest()
@@ -113,7 +115,6 @@ requests[i].addEventListener('load', function () {
 getCountryAndNeighbour('russia')
 */
 
-
 // const getCountryData = function (country) {
 //     fetch(`https://restcountries.com/v3.1/name/${country}`).then(function (response) {
 //         console.log(response);
@@ -124,34 +125,123 @@ getCountryAndNeighbour('russia')
 //     })
 // }
 
-
+/*
 const getCountryData = function (country) {
-    // Country 1
-    fetch(`https://restcountries.com/v3.1/name/${country}`)
-        .then(response => response.json())
-        .then(data => {
-            renderCountry(data[0])
-            const neighbours = data[0].borders;
+  // Country 1
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(response => {
+      console.log(response);
 
-            if (!neighbours) return
+      if (!response.ok)
+        throw new Error(`Country not found: (${response.status})`);
 
-            for (let [i, neighbour] of neighbours.entries()) {
-                console.log(i, neighbour);
-                fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`)
-                    .then(response => response.json())
-                    .then(data => renderCountry(data[0], 'neighbour'))
+      return response.json();
+    })
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbours = data[0].borders;
+    //   const neighbours = ['sdsdsd', 'sdsds', 'sdsdsd'];
+    console.log(neighbours);
+
+      if (!neighbours) throw new Error(`No neighbour found`);
+
+      let a = false;
+      for (let [i, neighbour] of neighbours.entries()) {
+        // console.log(i, neighbour);
+        fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`)
+          .then(response => {
+            console.log(response);
+
+            if (!response.ok) {
+                a = true;
+                throw new Error(`Country not found: (${response.status})`);
             }
-        }).catch(err => {
-            console.error(err)
-            renderError(`Something went wrong ${err}`)
-        })
-        .finally(() => {
-            countriesContainer.style.opacity = 1
-        })
-}
+
+            return response.json();
+          })
+          .then(data => renderCountry(data[0], 'neighbour'));
+      }
+      if(a) return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`)
+    })
+    .catch(err => {
+      console.error(err);
+      renderError(`Something went wrong ${err}`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+};
 
 btn.addEventListener('click', function () {
-    getCountryData('belize')
-})
-getCountryData('dsf')
+  getCountryData('australia');
+});
+*/
 
+// Chellenge 1
+// function parseXml(xml, arrayTags) {
+//     let dom = null;
+//     if (window.DOMParser) dom = (new DOMParser()).parseFromString(xml, "text/xml");
+//     else if (window.ActiveXObject) {
+//         dom = new ActiveXObject('Microsoft.XMLDOM');
+//         dom.async = false;
+//         if (!dom.loadXML(xml)) throw dom.parseError.reason + " " + dom.parseError.srcText;
+//     }
+//     else throw new Error("cannot parse xml string!");
+
+//     function parseNode(xmlNode, result) {
+//         if (xmlNode.nodeName == "#text") {
+//             let v = xmlNode.nodeValue;
+//             if (v.trim()) result['#text'] = v;
+//             return;
+//         }
+
+//         let jsonNode = {},
+//             existing = result[xmlNode.nodeName];
+//         if (existing) {
+//             if (!Array.isArray(existing)) result[xmlNode.nodeName] = [existing, jsonNode];
+//             else result[xmlNode.nodeName].push(jsonNode);
+//         }
+//         else {
+//             if (arrayTags && arrayTags.indexOf(xmlNode.nodeName) != -1) result[xmlNode.nodeName] = [jsonNode];
+//             else result[xmlNode.nodeName] = jsonNode;
+//         }
+
+//         if (xmlNode.attributes) for (let attribute of xmlNode.attributes) jsonNode[attribute.nodeName] = attribute.nodeValue;
+
+//         for (let node of xmlNode.childNodes) parseNode(node, jsonNode);
+//     }
+
+//     let result = {};
+//     for (let node of dom.childNodes) parseNode(node, result);
+
+//     return result;
+// }
+// function whereAmI(lat, lng) {
+//   fetch(`https://geocode.xyz/${lat},${lng}?geoit=xml`).then(response => console.log(response))
+// }
+
+// whereAmI(52.506, 13.381);
+
+
+// btn.addEventListener('click', function () {
+// navigator.geolocation.getCurrentPosition(function (position) {
+//     const {latitude} = position.coords
+//     const {longitude} = position.coords
+//     whereAmI(latitude, longitude)
+// }, function (err) {
+//     console.log(err)
+// })
+// })
+
+console.log("Test start");
+setTimeout(function () {
+  console.log('0sec timer'), 0;
+})
+Promise.resolve('Resolved promise 1').then(function (res) {
+  console.log(res);
+})
+Promise.resolve('Resolved promise 2').then(function (res) {
+  for(let i = 0; i <1000000000; i++) {}
+  console.log(res);
+})
+console.log('Test end');
