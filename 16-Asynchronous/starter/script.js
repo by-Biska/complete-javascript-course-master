@@ -233,15 +233,21 @@ btn.addEventListener('click', function () {
 // })
 // })
 
-console.log("Test start");
-setTimeout(function () {
-  console.log('0sec timer'), 0;
+// console.log("Test start");
+// setTimeout(function () {
+//   console.log('0sec timer'), 0;
+// })
+// Promise.resolve('Resolved promise 1').then(function (res) {
+//   console.log(res);
+// })
+// Promise.resolve('Resolved promise 2').then(function (res) {
+//   for(let i = 0; i <1000000000; i++) {}
+//   console.log(res);
+// })
+// console.log('Test end');
+
+const lotteryPromise = new Promise(function (resolve, reject) {
+  if(Math.random() >= 0.5) {
+    resolve()
+  }
 })
-Promise.resolve('Resolved promise 1').then(function (res) {
-  console.log(res);
-})
-Promise.resolve('Resolved promise 2').then(function (res) {
-  for(let i = 0; i <1000000000; i++) {}
-  console.log(res);
-})
-console.log('Test end');
