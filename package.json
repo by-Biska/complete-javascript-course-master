@@ -1,5 +1,24 @@
 {
   "dependencies": {
-    "leaflet": "^1.7.1"
-  }
+    "leaflet": "^1.8.0",
+    "lodash-es": "^4.17.21"
+  },
+  "name": "complete-javascript-course-master",
+  "description": "This repo contains starter files and final code for all sections and projects contained in the course.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/by-Biska/complete-javascript-course-master.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/by-Biska/complete-javascript-course-master/issues"
+  },
+  "homepage": "https://github.com/by-Biska/complete-javascript-course-master#readme"
 }
